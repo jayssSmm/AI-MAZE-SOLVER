@@ -147,7 +147,7 @@ class Maze():
                     frontier.add(child)       
 
     def output_image(self, filename):
-        from PTI import ImageDraw     
+        from PIL import ImageDraw     
 
 
 if __name__=='__main__':
