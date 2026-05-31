@@ -1,11 +1,10 @@
 import sys
 
 class Node():
-    def __init__(self, state, parent, action, cost):
+    def __init__(self, state, parent, action):
         self.state = state
         self.parent = parent
         self.action = action
-        self.cost = cost
 
 class stackFrontier():
     def __init__(self):
@@ -111,4 +110,38 @@ class Maze():
         return result
     
     def solve(self):
-        
+        self.num_explored = 0
+
+        start = Node(state=self.start, parent=None, action=None)
+        frontier = stackFrontier()
+        frontier.add(start)
+
+        self.explored = set()
+
+        while True:
+            if frontier.is_empty():
+                raise Exception("no solution")
+            
+            node = frontier.remove()
+            self.num_explored += 1
+
+            if node.state == self.goal:
+                actions = []
+                cells = []
+
+                while node.parent is not None:
+                    actions.append(node.action)
+                    cells.append(node.state)
+                    node = node.parent 
+                
+                actions.reverse()
+                cells.reverse()
+                self.solution = actions, cells
+                return
+            
+            self.explored.add(node.state)
+
+            for action, state in self.neighbors(node.state):
+                if not frontier.contains_state(state) and state not in self.explored:
+                    child = Node(state=state, parent=node, action=action)
+                    frontier.add(child) 
