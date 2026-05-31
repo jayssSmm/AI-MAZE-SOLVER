@@ -151,8 +151,17 @@ class Maze():
 
 
 if __name__=='__main__':
+    print("program started")
     parser = argparse.ArgumentParser()
     parser.add_argument("filename")
     args = parser.parse_args()
 
-    Maze(args.filename)
+    maze = Maze(args.filename)
+
+    print("Maze:")
+    maze.print()
+    
+    maze.solve()
+
+    print("\nSolution:")
+    maze.print()
