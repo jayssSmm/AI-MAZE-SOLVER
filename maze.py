@@ -90,3 +90,25 @@ class Maze():
                 else:
                     print(" ", end='')
             print()
+
+    def neighbors(self, state):
+        row, col = state
+
+        candidates = {
+            "left"  :   (-1,0),
+            "right" :   (1,0),
+            "up"    :   (0,1),
+            "down"  :   (0,-1),
+        }
+
+        result = []
+        for action, (r, c) in candidates:
+            try:
+                if not self.walls[r][c]:
+                    result.append((action, (r,c)))
+            except IndexError:
+                continue
+        return result
+    
+    def solve(self):
+        
