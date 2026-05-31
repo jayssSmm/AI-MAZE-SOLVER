@@ -79,7 +79,7 @@ class Maze():
         for i, row in enumerate(self.walls):
             for j, col in enumerate(row):
                 if col:
-                    print("", end='')
+                    print("█", end='')
                 elif (i, j) == self.start:
                     print("A", end='')
                 elif (i, j) == self.goal:
@@ -93,12 +93,12 @@ class Maze():
     def neighbors(self, state):
         row, col = state
 
-        candidates = {
-            "left"  :   (-1,0),
-            "right" :   (1,0),
-            "up"    :   (0,1),
-            "down"  :   (0,-1),
-        }
+        candidates = [
+            ('left', (row, col-1)),
+            ('right', (row, col+1)),
+            ('up', (row+1, col)),
+            ('down', (row-1, col)),
+        ]
 
         result = []
         for action, (r, c) in candidates:
@@ -144,13 +144,15 @@ class Maze():
             for action, state in self.neighbors(node.state):
                 if not frontier.contains_state(state) and state not in self.explored:
                     child = Node(state=state, parent=node, action=action)
-                    frontier.add(child)            
+                    frontier.add(child)       
+
+    def output_image(self, filename):
+        from PTI import ImageDraw     
 
 
 if __name__=='__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("filename")
-
     args = parser.parse_args()
 
     Maze(args.filename)
