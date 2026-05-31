@@ -1,4 +1,4 @@
-import sys
+import argparse
 
 class Node():
     def __init__(self, state, parent, action):
@@ -144,4 +144,13 @@ class Maze():
             for action, state in self.neighbors(node.state):
                 if not frontier.contains_state(state) and state not in self.explored:
                     child = Node(state=state, parent=node, action=action)
-                    frontier.add(child) 
+                    frontier.add(child)            
+
+
+if __name__=='__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument("filename")
+
+    args = parser.parse_args()
+
+    Maze(args.filename)
