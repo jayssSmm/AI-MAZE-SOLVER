@@ -1,5 +1,6 @@
 import argparse
 import random
+import heapq
 
 class Node():
     def __init__(self, state, parent, action):
@@ -34,6 +35,23 @@ class QueueFrontier(stackFrontier):
         node = self.frontier[0]
         self.frontier = self.frontier[1:]
         return  node
+    
+class HeuristicFrontier(stackFrontier):
+    def __init__(self, goal):
+        self.goal = goal
+        self.frontier = []
+
+    def heuristic(self, state):
+        goal_x, goal_y = self.goal
+        x, y = state
+
+        return abs(x - goal_x) + abs(y - goal_y)
+
+    def add(self, node):
+        heapq.heappush(self.frontier, (self.heuristic(node.state), node))
+
+    def remove(self):
+        return heapq.heappop(self.frontier)[1]
     
 class Maze():
 
@@ -114,7 +132,7 @@ class Maze():
         self.num_explored = 0
 
         start = Node(state=self.start, parent=None, action=None)
-        frontier = stackFrontier()
+        frontier = HeuristicFrontier(self.goal)
         frontier.add(start)
 
         self.explored = set()
