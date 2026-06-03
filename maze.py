@@ -1,4 +1,5 @@
 import argparse
+import random
 
 class Node():
     def __init__(self, state, parent, action):
@@ -141,12 +142,14 @@ class Maze():
             
             self.explored.add(node.state)
 
-            for action, state in self.neighbors(node.state):
+            neighbors = self.neighbors(node.state)
+            random.shuffle(neighbors)
+            for action, state in neighbors:
                 if not frontier.contains_state(state) and state not in self.explored:
                     child = Node(state=state, parent=node, action=action)
                     frontier.add(child)       
 
-    def output_image(self, filename = 'solved_maze1.png'):
+    def output_image(self, filename = 'solved_maze1.png', show_explored=False):
         from PIL import Image, ImageDraw     
 
         img = Image.new("RGB", (self.width * 100, self.height * 100))
@@ -169,7 +172,7 @@ class Maze():
                     square = stop
                 elif (i, j) in self.solution[1]:
                     square = solution
-                elif (i, j) in self.explored:
+                elif show_explored and (i, j) in self.explored:
                     square = visited
                 else:
                     square = path
@@ -205,7 +208,9 @@ if __name__=='__main__':
     
     maze.solve()
 
+    print("\nstates explored : ", maze.num_explored)
+
     print("\nSolution:")
     maze.print()
 
-    maze.output_image()
+    maze.output_image(show_explored=False)
