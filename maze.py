@@ -152,19 +152,22 @@ class Maze():
         img = Image.new("RGB", (self.width * 100, self.height * 100))
 
         wall = Image.new("RGB", (100, 100), '#282828')
-        solution = Image.new("RGB", (100, 100), '#467846')
+        stop = Image.new("RGB", (100, 100), '#467846')
         visited = Image.new("RGB", (100, 100), '#8C4646')
-        startStop = Image.new("RGB", (100, 100), '#465A8C')
+        start = Image.new("RGB", (100, 100), '#DC3C3C')
         path = Image.new("RGB", (100, 100), '#D2D2D2')
+        solution = Image.new("RGB", (100, 100), '#DCBE3C')
         square_size = 100
 
         for i, row in enumerate(self.walls):
             for j, col in enumerate(row): 
                 if col:
                     square = wall
-                elif (i, j) == self.start or (i, j) == self.goal:
-                    square = startStop
-                elif solution is not None and (i, j) in self.solution[1]:
+                elif (i, j) == self.start:
+                    square = start
+                elif (i, j) == self.goal:
+                    square = stop
+                elif (i, j) in self.solution[1]:
                     square = solution
                 elif (i, j) in self.explored:
                     square = visited
