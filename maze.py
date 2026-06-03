@@ -164,7 +164,7 @@ class Maze():
                     square = wall
                 elif (i, j) == self.start or (i, j) == self.goal:
                     square = startStop
-                elif solution is not None and (i, j) in self.solution:
+                elif solution is not None and (i, j) in self.solution[1]:
                     square = solution
                 elif (i, j) in self.explored:
                     square = visited
@@ -185,6 +185,7 @@ class Maze():
                 img.paste(square, (x1, y1))
 
         img.save(filename)
+        img.show()
 
 
 if __name__=='__main__':
