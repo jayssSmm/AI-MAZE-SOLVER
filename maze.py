@@ -210,6 +210,8 @@ if __name__=='__main__':
 
     print("\nstates explored : ", maze.num_explored)
 
+    print("\nsolution steps : ", len(maze.solution[1]))
+
     print("\nSolution:")
     maze.print()
 
