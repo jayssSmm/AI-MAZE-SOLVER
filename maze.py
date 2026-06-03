@@ -53,6 +53,9 @@ class HeuristicFrontier(stackFrontier):
     def remove(self):
         return heapq.heappop(self.frontier)[1]
     
+    def contains_state(self, state):
+        return any(node.state == state for _, node in self.frontier)
+    
 class Maze():
 
     def __init__(self, filename):
