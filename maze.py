@@ -47,13 +47,13 @@ class Maze():
             raise Exception("maze must have exact 1 goal")
         
         contents = contents.splitlines()
-        height = len(contents)
-        width = max(len(line) for line in contents)
+        self.height = len(contents)
+        self.width = max(len(line) for line in contents)
 
         self.walls = []
-        for i in range(height):
+        for i in range(self.height):
             row = []
-            for j in range(width):
+            for j in range(self.width):
                 try:
                     if contents[i][j] == 'A':
                         self.start = (i, j)
@@ -146,11 +146,49 @@ class Maze():
                     child = Node(state=state, parent=node, action=action)
                     frontier.add(child)       
 
-    def output_image(self, filename):
-        from PIL import ImageDraw     
+    def output_image(self, filename = 'solved_maze1.png'):
+        from PIL import Image, ImageDraw     
+
+        img = Image.new("RGB", (self.width * 100, self.height * 100))
+
+        wall = Image.new("RGB", (100, 100), '#282828')
+        solution = Image.new("RGB", (100, 100), '#467846')
+        visited = Image.new("RGB", (100, 100), '#8C4646')
+        startStop = Image.new("RGB", (100, 100), '#465A8C')
+        path = Image.new("RGB", (100, 100), '#D2D2D2')
+        square_size = 100
+
+        for i, row in enumerate(self.walls):
+            for j, col in enumerate(row): 
+                if col:
+                    square = wall
+                elif (i, j) == self.start or (i, j) == self.goal:
+                    square = startStop
+                elif solution is not None and (i, j) in self.solution:
+                    square = solution
+                elif (i, j) in self.explored:
+                    square = visited
+                else:
+                    square = path
+        
+                draw = ImageDraw.Draw(square)
+
+                draw.rectangle(
+                    [(0, 0), (99, 99)],
+                    outline="white",
+                    width=1
+                )
+
+                x1 = j * square_size
+                y1 = i * square_size
+
+                img.paste(square, (x1, y1))
+
+        img.save(filename)
 
 
 if __name__=='__main__':
+
     print("program started")
     parser = argparse.ArgumentParser()
     parser.add_argument("filename")
@@ -165,3 +203,5 @@ if __name__=='__main__':
 
     print("\nSolution:")
     maze.print()
+
+    maze.output_image()
