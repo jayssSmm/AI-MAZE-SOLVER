@@ -48,10 +48,10 @@ class HeuristicFrontier(stackFrontier):
         return abs(x - goal_x) + abs(y - goal_y)
 
     def add(self, node):
-        heapq.heappush(self.frontier, (self.heuristic(node.state), node))
+        heapq.heappush(self.frontier, (self.heuristic(node.state)))
 
     def remove(self):
-        return heapq.heappop(self.frontier)[1]
+        return heapq.heappop(self.frontier)
     
     def contains_state(self, state):
         return any(node.state == state for _, node in self.frontier)
