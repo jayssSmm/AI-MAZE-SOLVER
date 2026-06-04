@@ -48,7 +48,7 @@ class HeuristicFrontier(stackFrontier):
         return abs(x - goal_x) + abs(y - goal_y)
 
     def add(self, node):
-        heapq.heappush(self.frontier, (self.heuristic(node.state)))
+        heapq.heappush(self.frontier, (self.heuristic(node.state), node))
 
     def remove(self):
         return heapq.heappop(self.frontier)
@@ -147,7 +147,7 @@ class Maze():
             node = frontier.remove()
             self.num_explored += 1
 
-            if node.state == self.goal:
+            if node[1].state == self.goal:
                 actions = []
                 cells = []
 
@@ -161,9 +161,9 @@ class Maze():
                 self.solution = actions, cells
                 return
             
-            self.explored.add(node.state)
+            self.explored.add(node[1].state)
 
-            neighbors = self.neighbors(node.state)
+            neighbors = self.neighbors(node[1].state)
             random.shuffle(neighbors)
             for action, state in neighbors:
                 if not frontier.contains_state(state) and state not in self.explored:
